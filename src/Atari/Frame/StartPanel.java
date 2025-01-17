@@ -17,7 +17,7 @@ public class StartPanel {
         JPanel startPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         // 여백 설정
-        gbc.insets = new Insets(0, 10, 50, 10);
+        gbc.insets = new Insets(0, 20, 50, 10);
 
         //게임 제목 표기
 
@@ -25,6 +25,10 @@ public class StartPanel {
         title.setFont(new Font("Arial",Font.BOLD,50));
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.gridheight = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+
         startPanel.add(title,gbc);
         //시작버튼
         JButton start =new JButton("시작");
@@ -33,6 +37,7 @@ public class StartPanel {
         });
         gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.WEST;
         startPanel.add(start,gbc);
 
         //종료버튼
@@ -42,6 +47,7 @@ public class StartPanel {
         });
         gbc.gridx = 1;
         gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.EAST;
         startPanel.add(end,gbc);
 
         return startPanel;
