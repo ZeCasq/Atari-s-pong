@@ -13,7 +13,7 @@ public class GamePanel {
      */
     JPanel createGamePanel(CardLayout cardLayout, JPanel cardPanel){
         JPanel gamePanel = new JPanel();
-        JLabel test = new JLabel("이도헌 테스트용");
+        JLabel test = new JLabel("test");
 
         gamePanel.add(test);
         return gamePanel;
