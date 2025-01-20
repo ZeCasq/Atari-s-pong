@@ -31,8 +31,6 @@
             timer.start(); // 타이머 시작
         }
 
-        // 물체의 현재 x 좌표 계산 -> time 동안 움직이는 거리로 바꿈 (튕기는 부분 잘 구현하기 위함)
-
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -51,8 +49,8 @@
                     System.out.println(ball.drawY);
                 }
                 //벽 그리기 코드
-//                g.setColor(Color.BLACK);
-//                g.drawRect(10,300,10,70);
+                g.setColor(Color.BLACK);
+                g.drawLine(400,50,400,500);
 
                 if (ball.drawX <= 0 || ball.drawX + 6 >= getWidth()) {
                     //time = 0;       // x 시작 좌표에서부터 time만큼 간 거리를 더해주는 건데, 이동방향이 바뀌었는데도 time 초기화를 해주지 않으면 예를들어 speedX * time 이 800이 나오고 나서 운동방향 반전될 때 -800 이하가 나와버림.
