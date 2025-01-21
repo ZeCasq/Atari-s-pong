@@ -11,8 +11,8 @@
 
     public class sample extends JPanel {
         static JFrame frame;
-        static Wall wall1;
-        static Wall wall2;
+        static Wall wall1; //왼쪽 벽
+        static Wall wall2; //오른쪽 벽
         static ArrayList<Ball> balls =new ArrayList<>();
         private final int interval = 5; // 타이머 간격 (밀리초)
         private double time = 0; // 시간 (초)
@@ -20,35 +20,43 @@
 
 
         public sample() {
+            //키 감지하는 함수
             frame.addKeyListener(new KeyListener() {
+
+
                 @Override
+                //key가 눌려 문자가 완성 될 때 발생하는 이벤트 쓸 일 없을거 같은데 아마 동시 처리에 실마리가 될지도
                 public void keyTyped(KeyEvent e) {
+
                 }
 
                 @Override
+                //key가 눌릴 때 발생하는 이벤트
                 public void keyPressed(KeyEvent e) {
-                    int key = e.getKeyCode();
+                    int key = e.getKeyCode(); // key 입력받은 값을 저장하는 변수
+                    //왼쪽 화살표 누를때 오른쪽 벽 상승
                     if (key == KeyEvent.VK_LEFT) {
                         wall2.up();
                         repaint();
                     }
-
+                    //오른쪽 화살표 누를 떄 오른쪽 벽 하락
                     if (key == KeyEvent.VK_RIGHT) {
                         wall2.down();
                         repaint();
                     }
-
+                    //key A가 눌릴 때 왼쪽 벽 상승
                     if (key == KeyEvent.VK_A) {
                         wall1.up();
                         repaint();
                     }
+                    //key D가 눌릴 때 오른쪽 벽 하락
                     if (key == KeyEvent.VK_D) {
                         wall1.down();
                         repaint();
                     }
 
                 }
-
+                //키가 눌렸다 때질 때 이벤트 처리
                 @Override
                 public void keyReleased(KeyEvent e) {
 
@@ -75,7 +83,7 @@
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            for(Ball ball : balls){
+            for(Ball ball : balls){//ArrayList에 공 객체 담고 리스트안에 있는 객체들 모두 불러와서 그림 그림
                 // 초기 위치
                 // 현재 위치 계산
                 double x = ball.calculateX();
