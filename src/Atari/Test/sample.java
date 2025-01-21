@@ -4,10 +4,15 @@
     import java.awt.*;
     import java.awt.event.ActionEvent;
     import java.awt.event.ActionListener;
+    import java.awt.event.KeyEvent;
+    import java.awt.event.KeyListener;
     import java.util.ArrayList;
     import java.util.Random;
 
     public class sample extends JPanel {
+        static JFrame frame;
+        static Wall wall1;
+        static Wall wall2;
         static ArrayList<Ball> balls =new ArrayList<>();
         private final int interval = 5; // 타이머 간격 (밀리초)
         private double time = 0; // 시간 (초)
@@ -15,10 +20,46 @@
 
 
         public sample() {
+            frame.addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    int key = e.getKeyCode();
+                    if (key == KeyEvent.VK_LEFT) {
+                        wall2.up();
+                        repaint();
+                    }
+
+                    if (key == KeyEvent.VK_RIGHT) {
+                        wall2.down();
+                        repaint();
+                    }
+
+                    if (key == KeyEvent.VK_A) {
+                        wall1.up();
+                        repaint();
+                    }
+                    if (key == KeyEvent.VK_D) {
+                        wall1.down();
+                        repaint();
+                    }
+
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+
+                }
+            }
+            );
             // 타이머 설정
-            timer = new Timer(interval, new ActionListener() {  //interval 마다 actionPerformed가 실행되는 구조
+            timer = new Timer(interval, new ActionListener() {//interval 마다 actionPerformed가 실행되는 구조
                 @Override
                 public void actionPerformed(ActionEvent e) {
+
                     time += interval; // 시간 증가
 //                    if ((int) (time) % 5000 == 0) {     // 일정 시간마다 속도 증가
 //                        speedX *= 1.6;
@@ -46,9 +87,13 @@
                 if (true) {  // y좌표계는 위로 올라갈 수록 작은 거임.
                     g.setColor(Color.BLUE);
                     g.fillOval(ball.drawX, ball.drawY, 10, 10); // 물체 그리기 x 지름 y지름 모두 10인 타원 즉, 반지름이 5인 원
-                    System.out.println(ball.drawY);
+                    System.out.println(wall2.startY);
                 }
-                //벽 그리기 코드
+                //벽 만드는 코드
+                g.setColor(Color.BLACK);
+                g.drawRect(wall1.startX,wall1.startY,10,30);
+                g.drawRect(wall2.startX,wall2.startY,10,30);
+                //중앙선 그리는 코드
                 g.setColor(Color.BLACK);
                 g.drawLine(400,50,400,500);
 
@@ -65,13 +110,15 @@
         }
 
         public static void main(String[] args) {
+            wall1 = new Wall(10,300);
+            wall2 = new Wall(750,300);
             //공 객체 balls라는 ArrayList에 추가하면 객체 추가 됨.
             Ball ball1 = new Ball();
             Ball ball2 = new Ball();
 
             balls.add(ball1);
             balls.add(ball2);
-            JFrame frame = new JFrame("Projectile Simulation");
+            frame = new JFrame("Projectile Simulation");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(800, 600);
 

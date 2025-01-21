@@ -15,14 +15,14 @@ public class Wall {
      * 벽 상승
      */
     public void up(){
-        this.startY--;
+        this.startY -= 2;
     }
 
     /**
      * 벽 하락
      */
     public void down(){
-        this.startY++;
+        this.startY += 2;
     }
 
 }
