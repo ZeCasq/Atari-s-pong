@@ -10,6 +10,7 @@
     import java.util.Random;
 
     public class sample extends JPanel {
+
         static JFrame frame;
         static Wall wall1; //왼쪽 벽
         static Wall wall2; //오른쪽 벽
@@ -36,23 +37,29 @@
                     int key = e.getKeyCode(); // key 입력받은 값을 저장하는 변수
                     //왼쪽 화살표 누를때 오른쪽 벽 상승
                     if (key == KeyEvent.VK_LEFT) {
-                        wall2.up();
-                        repaint();
+                        if(!(wall2.startY <= 0)){
+                            wall2.up();
+                        }
                     }
                     //오른쪽 화살표 누를 떄 오른쪽 벽 하락
                     if (key == KeyEvent.VK_RIGHT) {
-                        wall2.down();
-                        repaint();
+                        if(!(wall2.startY >= getHeight()-wall2.height)){
+                            wall2.down();
+                        }
+
                     }
                     //key A가 눌릴 때 왼쪽 벽 상승
                     if (key == KeyEvent.VK_A) {
-                        wall1.up();
-                        repaint();
+                        if(!(wall1.startY <= 0)){
+                            wall1.up();
+                        }
                     }
                     //key D가 눌릴 때 오른쪽 벽 하락
                     if (key == KeyEvent.VK_D) {
-                        wall1.down();
-                        repaint();
+                        if(!(wall1.startY >= getHeight()-wall2.height)){
+                            wall1.down();
+                        }
+
                     }
 
                 }
@@ -99,8 +106,8 @@
                 }
                 //벽 만드는 코드
                 g.setColor(Color.BLACK);
-                g.drawRect(wall1.startX,wall1.startY,10,30);
-                g.drawRect(wall2.startX,wall2.startY,10,30);
+                g.drawRect(wall1.startX,wall1.startY,wall1.width,wall1.height);
+                g.drawRect(wall2.startX,wall2.startY,wall2.width,wall2.height);
                 //중앙선 그리는 코드
                 g.setColor(Color.BLACK);
                 g.drawLine(400,50,400,500);
@@ -109,6 +116,19 @@
                     //time = 0;       // x 시작 좌표에서부터 time만큼 간 거리를 더해주는 건데, 이동방향이 바뀌었는데도 time 초기화를 해주지 않으면 예를들어 speedX * time 이 800이 나오고 나서 운동방향 반전될 때 -800 이하가 나와버림.
                     ball.reflectX();
                 }
+                //벽판정
+                //왼
+                if (ball.drawX <= wall1.startX +wall1.width&&(ball.drawY >= wall1.startY && ball.drawY <= wall1.startY +wall1.height)) {
+                    //time = 0;       // x 시작 좌표에서부터 time만큼 간 거리를 더해주는 건데, 이동방향이 바뀌었는데도 time 초기화를 해주지 않으면 예를들어 speedX * time 이 800이 나오고 나서 운동방향 반전될 때 -800 이하가 나와버림.
+                    ball.reflectX();
+                }
+                //우
+                if (ball.drawX >= wall2.startX -wall2.width&&(ball.drawY >= wall2.startY && ball.drawY <= wall2.startY +wall1.height)) {
+                    //time = 0;       // x 시작 좌표에서부터 time만큼 간 거리를 더해주는 건데, 이동방향이 바뀌었는데도 time 초기화를 해주지 않으면 예를들어 speedX * time 이 800이 나오고 나서 운동방향 반전될 때 -800 이하가 나와버림.
+                    ball.reflectX();
+                }
+
+
 
                 if (ball.drawY <= 0 || ball.drawY + 6 >= getHeight()) { //frame height 크기가 600이기 때문.
                     //time = 0;       // 같은 이유로 여기서도 초기화.
@@ -118,8 +138,8 @@
         }
 
         public static void main(String[] args) {
-            wall1 = new Wall(10,300);
-            wall2 = new Wall(750,300);
+            wall1 = new Wall(20,300,10,100);
+            wall2 = new Wall(750,300,10,100);
             //공 객체 balls라는 ArrayList에 추가하면 객체 추가 됨.
             Ball ball1 = new Ball();
             Ball ball2 = new Ball();
