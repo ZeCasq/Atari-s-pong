@@ -18,10 +18,19 @@
         private final int interval = 5; // 타이머 간격 (밀리초)
         private double time = 0; // 시간 (초)
         private Timer timer;
+        //추후 쓰레드를 위한 변수
+        static WallMove wallMove;
+        static WallMove wallMove2;
+
+
+
 
 
         public sample() {
             //키 감지하는 함수
+            /*알고리즘 자체는 키를 누르고 있을 때 해당하는 변수를 true로 바꾸고 그 키를 땔 때 false로 바꾸는 것으로
+            쓰레드에서 만약 해당하는 변수의 값이 true면 그에 맞게 벽이 움직이도록 설정함
+             */
             frame.addKeyListener(new KeyListener() {
 
 
@@ -34,30 +43,29 @@
                 @Override
                 //key가 눌릴 때 발생하는 이벤트
                 public void keyPressed(KeyEvent e) {
-                    int key = e.getKeyCode(); // key 입력받은 값을 저장하는 변수
+                    int key = e.getKeyCode();// key 입력받은 값을 저장하는 변수
                     //왼쪽 화살표 누를때 오른쪽 벽 상승
                     if (key == KeyEvent.VK_LEFT) {
                         if(!(wall2.startY <= 0)){
-                            wall2.up();
+                            wallMove.isUp = true;
                         }
                     }
                     //오른쪽 화살표 누를 떄 오른쪽 벽 하락
                     if (key == KeyEvent.VK_RIGHT) {
                         if(!(wall2.startY >= getHeight()-wall2.height)){
-                            wall2.down();
+                            wallMove.isDown = true;
                         }
 
                     }
                     //key A가 눌릴 때 왼쪽 벽 상승
                     if (key == KeyEvent.VK_A) {
-                        if(!(wall1.startY <= 0)){
-                            wall1.up();
-                        }
+                            wallMove2.isUp = true;
+
                     }
                     //key D가 눌릴 때 오른쪽 벽 하락
                     if (key == KeyEvent.VK_D) {
-                        if(!(wall1.startY >= getHeight()-wall2.height)){
-                            wall1.down();
+                        if(!(wall1.startY >= getHeight()-wall1.height)){
+                            wallMove2.isDown = true;
                         }
 
                     }
@@ -66,6 +74,19 @@
                 //키가 눌렸다 때질 때 이벤트 처리
                 @Override
                 public void keyReleased(KeyEvent e) {
+                    int key = e.getKeyCode();
+                    if (key == KeyEvent.VK_LEFT) {
+                            wallMove.isUp = false;
+                    }
+                    if (key == KeyEvent.VK_RIGHT) {
+                            wallMove.isDown = false;
+                    }
+                    if (key == KeyEvent.VK_A) {
+                        wallMove2.isUp = false;
+                    }
+                    if (key == KeyEvent.VK_D) {
+                        wallMove2.isDown = false;
+                    }
 
                 }
             }
@@ -102,7 +123,7 @@
                 if (true) {  // y좌표계는 위로 올라갈 수록 작은 거임.
                     g.setColor(Color.BLUE);
                     g.fillOval(ball.drawX, ball.drawY, 10, 10); // 물체 그리기 x 지름 y지름 모두 10인 타원 즉, 반지름이 5인 원
-                    System.out.println(wall2.startY);
+
                 }
                 //벽 만드는 코드
                 g.setColor(Color.BLACK);
@@ -113,25 +134,24 @@
                 g.drawLine(400,50,400,500);
 
                 if (ball.drawX <= 0 || ball.drawX + 6 >= getWidth()) {
-                    //time = 0;       // x 시작 좌표에서부터 time만큼 간 거리를 더해주는 건데, 이동방향이 바뀌었는데도 time 초기화를 해주지 않으면 예를들어 speedX * time 이 800이 나오고 나서 운동방향 반전될 때 -800 이하가 나와버림.
+
                     ball.reflectX();
                 }
                 //벽판정
                 //왼
-                if (ball.drawX <= wall1.startX +wall1.width&&(ball.drawY >= wall1.startY && ball.drawY <= wall1.startY +wall1.height)) {
-                    //time = 0;       // x 시작 좌표에서부터 time만큼 간 거리를 더해주는 건데, 이동방향이 바뀌었는데도 time 초기화를 해주지 않으면 예를들어 speedX * time 이 800이 나오고 나서 운동방향 반전될 때 -800 이하가 나와버림.
+                if ((ball.drawX <= wall1.startX +wall1.width &&ball.drawX >= wall1.startX )&&(ball.drawY >= wall1.startY && ball.drawY <= wall1.startY +wall1.height)) {
+
                     ball.reflectX();
                 }
                 //우
-                if (ball.drawX >= wall2.startX -wall2.width&&(ball.drawY >= wall2.startY && ball.drawY <= wall2.startY +wall1.height)) {
-                    //time = 0;       // x 시작 좌표에서부터 time만큼 간 거리를 더해주는 건데, 이동방향이 바뀌었는데도 time 초기화를 해주지 않으면 예를들어 speedX * time 이 800이 나오고 나서 운동방향 반전될 때 -800 이하가 나와버림.
+                if ((ball.drawX >= wall2.startX -wall2.width&&ball.drawX <= wall2.startX)&&(ball.drawY >= wall2.startY && ball.drawY <= wall2.startY +wall1.height)) {
                     ball.reflectX();
                 }
 
 
 
                 if (ball.drawY <= 0 || ball.drawY + 6 >= getHeight()) { //frame height 크기가 600이기 때문.
-                    //time = 0;       // 같은 이유로 여기서도 초기화.
+
                     ball.reflectY();
                 }
             }
@@ -140,16 +160,29 @@
         public static void main(String[] args) {
             wall1 = new Wall(20,300,10,100);
             wall2 = new Wall(750,300,10,100);
+            /*
+            이 부분은 블로그를 참고하면 좋을거 같음
+             */
+            wallMove = new WallMove(wall2);
+            wallMove2 = new WallMove(wall1);
+            Thread thread = new Thread(wallMove);
+            Thread thread1 = new Thread(wallMove2);
+
+            thread.start();
+            thread1.start();
+
             //공 객체 balls라는 ArrayList에 추가하면 객체 추가 됨.
             Ball ball1 = new Ball();
             Ball ball2 = new Ball();
+            balls.add(new Ball());
+
 
             balls.add(ball1);
             balls.add(ball2);
             frame = new JFrame("Projectile Simulation");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(800, 600);
-
+            frame.setResizable(false); //화면 크기 고정
             sample simulation = new sample();
             frame.add(simulation);
 

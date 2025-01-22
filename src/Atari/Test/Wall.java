@@ -19,14 +19,19 @@ public class Wall {
      * 벽 상승
      */
     public void up(){
-        this.startY -= 5;
+        if(!(this.startY <= 0)) {
+            this.startY -= 10;
+        }
     }
 
     /**
      * 벽 하락
      */
+    //getContentPane은 이제 테두리 미포함,즉 실제 우리가 만질 수 있는 화면 부분을 말함
     public void down(){
-        this.startY += 5;
+        if(!(this.startY >= sample.frame.getContentPane().getHeight()-this.height)){
+        this.startY += 10;
+        }
     }
 
 }
