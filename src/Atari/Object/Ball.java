@@ -1,4 +1,5 @@
 package Atari.Object;
 
-public class wall {
+public class Ball {
+
 }

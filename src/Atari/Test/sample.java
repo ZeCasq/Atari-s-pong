@@ -7,7 +7,7 @@
     import java.awt.event.KeyEvent;
     import java.awt.event.KeyListener;
     import java.util.ArrayList;
-    import java.util.Random;
+
 
     public class sample extends JPanel {
 
@@ -19,7 +19,7 @@
         private double time = 0; // 시간 (초)
         private Timer timer;
         //추후 쓰레드를 위한 변수
-        static WallMove wallMove;
+        static WallMove wallMove1;
         static WallMove wallMove2;
 
 
@@ -47,25 +47,25 @@
                     //왼쪽 화살표 누를때 오른쪽 벽 상승
                     if (key == KeyEvent.VK_LEFT) {
                         if(!(wall2.startY <= 0)){
-                            wallMove.isUp = true;
+                            wallMove2.isUp = true;
                         }
                     }
                     //오른쪽 화살표 누를 떄 오른쪽 벽 하락
                     if (key == KeyEvent.VK_RIGHT) {
                         if(!(wall2.startY >= getHeight()-wall2.height)){
-                            wallMove.isDown = true;
+                            wallMove2.isDown = true;
                         }
 
                     }
                     //key A가 눌릴 때 왼쪽 벽 상승
                     if (key == KeyEvent.VK_A) {
-                            wallMove2.isUp = true;
+                            wallMove1.isUp = true;
 
                     }
                     //key D가 눌릴 때 오른쪽 벽 하락
                     if (key == KeyEvent.VK_D) {
                         if(!(wall1.startY >= getHeight()-wall1.height)){
-                            wallMove2.isDown = true;
+                            wallMove1.isDown = true;
                         }
 
                     }
@@ -76,16 +76,16 @@
                 public void keyReleased(KeyEvent e) {
                     int key = e.getKeyCode();
                     if (key == KeyEvent.VK_LEFT) {
-                            wallMove.isUp = false;
+                            wallMove2.isUp = false;
                     }
                     if (key == KeyEvent.VK_RIGHT) {
-                            wallMove.isDown = false;
+                            wallMove2.isDown = false;
                     }
                     if (key == KeyEvent.VK_A) {
-                        wallMove2.isUp = false;
+                        wallMove1.isUp = false;
                     }
                     if (key == KeyEvent.VK_D) {
-                        wallMove2.isDown = false;
+                        wallMove1.isDown = false;
                     }
 
                 }
@@ -163,10 +163,10 @@
             /*
             이 부분은 블로그를 참고하면 좋을거 같음
              */
-            wallMove = new WallMove(wall2);
-            wallMove2 = new WallMove(wall1);
-            Thread thread = new Thread(wallMove);
-            Thread thread1 = new Thread(wallMove2);
+            wallMove2 = new WallMove(wall2);
+            wallMove1 = new WallMove(wall1);
+            Thread thread = new Thread(wallMove2);
+            Thread thread1 = new Thread(wallMove1);
 
             thread.start();
             thread1.start();

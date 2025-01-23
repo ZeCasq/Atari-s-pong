@@ -13,9 +13,10 @@ public class MainFrame extends JFrame {
      */
     public MainFrame(String title) {
         super(title);
-        this.setSize(500,500);
+        this.setSize(800, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
+        this.setResizable(false); //화면 크기 고정
         initlayout();
         this.setVisible(true);
     }
