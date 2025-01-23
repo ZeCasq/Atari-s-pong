@@ -52,9 +52,8 @@
                     }
                     //오른쪽 화살표 누를 떄 오른쪽 벽 하락
                     if (key == KeyEvent.VK_RIGHT) {
-                        if(!(wall2.startY >= getHeight()-wall2.height)){
                             wallMove2.isDown = true;
-                        }
+                        
 
                     }
                     //key A가 눌릴 때 왼쪽 벽 상승
@@ -64,10 +63,7 @@
                     }
                     //key D가 눌릴 때 오른쪽 벽 하락
                     if (key == KeyEvent.VK_D) {
-                        if(!(wall1.startY >= getHeight()-wall1.height)){
                             wallMove1.isDown = true;
-                        }
-
                     }
 
                 }
