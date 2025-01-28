@@ -1,28 +1,19 @@
 package Atari.Frame;
 
+import Atari.System.Game;
+import Test.sample;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MainFrame extends JFrame {
-    Container frame = getContentPane();
+    static public JFrame frame = new JFrame();
     CardLayout cardLayout = new CardLayout();
 
-    /**
-     * 스윙 생성자
-     * @param title----제목
-     */
-    public MainFrame(String title) {
-        super(title);
-        this.setSize(800, 600);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false); //화면 크기 고정
-        initlayout();
-        this.setVisible(true);
-    }
 
 
-    private void initlayout() {
+
+    static private void initlayout() {
         frame.add(creatCardLayout());
     }
 
@@ -30,7 +21,8 @@ public class MainFrame extends JFrame {
      * 카드패널을 만들고 반환하는 함수
      * @return cardPanel -- 카드 패널 반환
      */
-    private JPanel creatCardLayout(){
+    private static JPanel creatCardLayout(){
+
         StartPanel startPanelm = new StartPanel();
         GamePanel gamePanelm = new GamePanel();
         //키드패널 생성
@@ -38,10 +30,13 @@ public class MainFrame extends JFrame {
         JPanel cardPanel = new JPanel(cardLayout);
 
         //카드레이아웃에 패널들 붙이기
-        JPanel startPanel  = startPanelm.createStartPanel(cardLayout,cardPanel);
-        cardPanel.add(startPanel,"StartScreen");
-        JPanel gamePanel = gamePanelm.createGamePanel(cardLayout,cardPanel);
+        GamePanel gamePanel = new GamePanel();
         cardPanel.add(gamePanel,"GameScreen");
+        JPanel startPanel  = startPanelm.createStartPanel(cardLayout,cardPanel,gamePanel);
+        cardPanel.add(startPanel,"StartScreen");
+
+        cardLayout.show(cardPanel,"StartScreen");
+
 
         return cardPanel;
     }
@@ -51,7 +46,13 @@ public class MainFrame extends JFrame {
      * @param args -- 모름 그냥 알아서 생성되는거
      */
     public static void main(String[] args) {
-        MainFrame mainFrame =new MainFrame("Pong");
+        frame = new JFrame("Projectile Simulation");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);
+        frame.setResizable(false); //화면 크기 고정
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        initlayout();
     }
 }
 
