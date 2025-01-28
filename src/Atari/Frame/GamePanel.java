@@ -21,7 +21,6 @@ import java.util.ArrayList;
 public class GamePanel extends JPanel {
 
     public GamePanel() {
-
         //키 감지하는 함수
             /*알고리즘 자체는 키를 누르고 있을 때 해당하는 변수를 true로 바꾸고 그 키를 땔 때 false로 바꾸는 것으로
             쓰   레드에서 만약 해당하는 변수의 값이 true면 그에 맞게 벽이 움직이도록 설정함

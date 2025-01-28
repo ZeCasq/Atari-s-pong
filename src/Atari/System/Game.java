@@ -25,7 +25,7 @@ public class Game{
     static WallMove wallMove1;
     static WallMove wallMove2;
     Thread thread;
-    Thread thread1;
+    Thread thread2;
     public Game(GamePanel gamePanel){
         this.gamePanel = gamePanel;
     }
@@ -39,10 +39,10 @@ public class Game{
 
         wall1 = new Wall(20,200,10,100);
         wall2 = new Wall(750,200,10,100);
-        wallMove2 = new WallMove(wall2);
         wallMove1 = new WallMove(wall1);
-        thread = new Thread(wallMove2);
-        thread1 = new Thread(wallMove1);
+        wallMove2 = new WallMove(wall2);
+        thread = new Thread(wallMove1);
+        thread2 = new Thread(wallMove2);
     }
 
     /**
@@ -51,7 +51,7 @@ public class Game{
     public void start(){
 
         thread.start();
-        thread1.start();
+        thread2.start();
 
         // 타이머 설정
         //interval 마다 actionPerformed가 실행되는 구조
@@ -67,6 +67,7 @@ public class Game{
             public void actionPerformed(ActionEvent e) {
 
                 time += interval; // 시간 증가
+
 //                    if ((int) (time) % 5000 == 0) {     // 일정 시간마다 속도 증가
 //                        speedX *= 1.6;
 //                        speedY *= 1.6;
