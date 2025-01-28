@@ -22,18 +22,20 @@ public class MainFrame extends JFrame {
      * @return cardPanel -- 카드 패널 반환
      */
     private static JPanel creatCardLayout(){
-
-        StartPanel startPanelm = new StartPanel();
-        GamePanel gamePanelm = new GamePanel();
-        //키드패널 생성
         CardLayout cardLayout = new CardLayout();
         JPanel cardPanel = new JPanel(cardLayout);
+        StartPanel startPanelm = new StartPanel();
+        PausePanel pausePanelm = new PausePanel();
+        //키드패널 생성
+
 
         //카드레이아웃에 패널들 붙이기
-        GamePanel gamePanel = new GamePanel();
+        GamePanel gamePanel = new GamePanel(cardLayout,cardPanel);
         cardPanel.add(gamePanel,"GameScreen");
         JPanel startPanel  = startPanelm.createStartPanel(cardLayout,cardPanel,gamePanel);
         cardPanel.add(startPanel,"StartScreen");
+        JPanel pausePanel = pausePanelm.createPausePanel(cardLayout,cardPanel,gamePanel);
+        cardPanel.add(pausePanel,"PausePanel");
 
         cardLayout.show(cardPanel,"StartScreen");
 

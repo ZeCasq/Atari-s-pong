@@ -20,7 +20,9 @@ import java.util.ArrayList;
  */
 public class GamePanel extends JPanel {
 
-    public GamePanel() {
+    public GamePanel(CardLayout cardLayout, JPanel cardPanel) {
+
+
         //키 감지하는 함수
             /*알고리즘 자체는 키를 누르고 있을 때 해당하는 변수를 true로 바꾸고 그 키를 땔 때 false로 바꾸는 것으로
             쓰   레드에서 만약 해당하는 변수의 값이 true면 그에 맞게 벽이 움직이도록 설정함
@@ -60,6 +62,12 @@ public class GamePanel extends JPanel {
                                      @Override
                                      public void keyReleased(KeyEvent e) {
                                          int key = e.getKeyCode();
+                                         //esc 눌렀을 때 퍼즈
+                                         if(key == KeyEvent.VK_ESCAPE){
+
+                                             cardLayout.show(cardPanel,"PausePanel");
+                                             Game.gamepause();
+                                         }
                                          if (key == KeyEvent.VK_LEFT) {
                                              Game.getWallMove2().isUp = false;
                                          }
@@ -87,6 +95,10 @@ public class GamePanel extends JPanel {
             // 현재 위치 계산
             double x = ball.calculateX();
             double y = ball.calculateY();
+//            if ((int) (Game.getTime()) % 5000 == 0) {     // 일정 시간마다 속도 증가
+//                ball.speedX *= 1.3;
+//                ball.speedY *= 1.3;
+//            }
             ball.drawX += (int) (x);
             ball.drawY -= (int) (y);
 
@@ -104,9 +116,11 @@ public class GamePanel extends JPanel {
             g.setColor(Color.BLACK);
             g.drawLine(400,50,400,500);
 
-            if (ball.drawX <= 0 || ball.drawX + 6 >= getWidth()) {
+            if (ball.drawX <= 0) {
 
-                ball.reflectX();
+            }
+            if( ball.drawX + 6 >= getWidth()){
+
             }
             //벽판정
             //왼
@@ -127,4 +141,6 @@ public class GamePanel extends JPanel {
             }
         }
     }
+
+
 }
