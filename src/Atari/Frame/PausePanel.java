@@ -15,9 +15,10 @@ public class PausePanel  {
         //재개 버튼
         JButton restart = new JButton("재개");
         restart.addActionListener(e -> {
+            Game game = Game.Instance;
             cardLayout.show(cardPanel,"GameScreen");
             gamePanel.requestFocusInWindow();
-            Game.gamerestart();
+            game.gamerestart();
         });
 
         gbc.gridx = 0;

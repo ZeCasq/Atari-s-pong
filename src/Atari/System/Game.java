@@ -4,37 +4,50 @@ import Atari.Object.*;
 import Atari.Object.WallMove;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 /**
      게임의 로직을 표현 하는 클래스
+    하나의 객체여야 하는데 외부에서 이 클래스를 호출할 일이 많아 싱글톤 사용
  */
-public class Game{
+public enum Game{
+    Instance;
+    private GamePanel gamePanel;      // 연결할 게임 패널 repaint를 요청하기 위해서
 
-    static Wall wall1; //왼쪽 벽
-    static Wall wall2; //오른쪽 벽
-    static ArrayList<Ball> balls =new ArrayList<>();
-    static int interval = 5;
-    private static double time = 0; // 시간 (초)
-    GamePanel gamePanel; // 연결할 게임 패널 repaint를 요청하기 위해서
+    private Wall wall1; //왼쪽 벽
+    private Wall wall2; //오른쪽 벽
+    private ArrayList<Ball> balls =new ArrayList<>();
+    private int interval = 5;
+    private double time = 0; // 시간 (초)
     //추후 쓰레드를 위한 변수
-    static WallMove wallMove1;
-    static WallMove wallMove2;
-    static Thread thread1;
-    static Thread thread2;
-    static Timer timer;
-    public Game(GamePanel gamePanel){
+    private WallMove wallMove1;
+    private WallMove wallMove2;
+    private Thread thread1;
+    private Thread thread2;
+    private Timer timer;
+
+
+    Game(){
+        //그냥 싱글톤은 생성자 받을 수 있는데 멀티 쓰레드 환경에서 위험할 수 있다고 enum을 씀
+    }
+
+    /**
+     * 생성자를 맡음
+     * @param gamePanel 생성자로 gamePanel 받아야해서,,,
+     */
+    public void settingGamePanel(GamePanel gamePanel){
         this.gamePanel = gamePanel;
     }
     //점수
-    static int score1;
-    static int score2;
+    private int score1 = 0;
+    private int score2 = 0;
 
     /**
      * 게임 시작 전 초기 설정해주는 클래스
      */
-    public  void gameset(){
+    public void gameset(){
         score1 = 0;
         score2 = 0;
         balls.clear();
@@ -83,50 +96,73 @@ public class Game{
      *게임 퍼즈 거는 메소드
      */
 
-    static public void gamepause(){
+    public void gamepause(){
+        gamePanel.repaint();
         thread1.interrupt();//쓰레드 멈추기위한 메소드
         thread2.interrupt();//이하동문
         timer.stop();//timer 멈추는 메소드
-
     }
 
     /**
      * 게임 재개하는 메소드
      */
-    static public void gamerestart(){
+    public void gamerestart(){
         timer.start();
         wallMove1.re();
         wallMove2.re();
     }
 
+    private void ballAdd(){
+        balls.add(new Ball());
+    }
+
+    private void ballsSpeedUp(){
+        for(Ball ball : balls){
+            ball.speedX *= 1.3;
+            ball.speedY *= 1.3;
+        }
+    }
 
 
-    static public void score1Up(){
+
+
+
+
+
+    public void score1Up(){
         score1++;
     }
-    static public void score2Up(){
+    public void score2Up(){
         score2++;
     }
-    public static ArrayList<Ball> getBalls() {
+    public  ArrayList<Ball> getBalls() {
         return balls;
     }
 
-    public static Wall getWall1() {
+    public  Wall getWall1() {
         return wall1;
     }
-    public static Wall getWall2(){
+    public  Wall getWall2(){
         return wall2;
     }
 
-    public static WallMove getWallMove1() {
+    public  WallMove getWallMove1() {
         return wallMove1;
     }
 
-    public static WallMove getWallMove2() {
+    public WallMove getWallMove2() {
         return wallMove2;
     }
 
-    public static double getTime() {
+    public int getScore1() {
+        return score1;
+    }
+
+    public int getScore2() {
+        return score2;
+    }
+
+    public double getTime() {
         return time;
     }
 }

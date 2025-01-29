@@ -35,7 +35,8 @@ public class StartPanel {
         //시작버튼
         JButton start =new JButton("시작");
         start.addActionListener(e ->{
-            Game game = new Game(gamePanel);
+            Game game = Game.Instance;
+            game.settingGamePanel(gamePanel);
             game.gameset();
 
             cardLayout.show(cardPanel,"GameScreen");

@@ -19,9 +19,42 @@ import java.util.ArrayList;
     게임의 ui및 키입력을 나타내는 클래스
  */
 public class GamePanel extends JPanel {
+    JLabel score1;
+    JLabel score2;
 
     public GamePanel(CardLayout cardLayout, JPanel cardPanel) {
+        Game game = Game.Instance;
+        this.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        // 여백 설정
+        gbc.insets = new Insets(0, 200, 240, 200);
 
+        //게임 제목 표기
+
+        JLabel explain = new JLabel("esc를 누르면 일시정지 됩니다");
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.gridheight = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        this.add(explain,gbc);
+
+        gbc.insets = new Insets(0, 100, 250, 100);
+        score1 = new JLabel(String.valueOf(game.getScore1()));
+        score1.setFont(new Font("Arial",Font.BOLD,50));
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        this.add(score1,gbc);
+
+        //종료버튼
+        score2 = new JLabel(String.valueOf(game.getScore2()));
+        score2.setFont(new Font("Arial",Font.BOLD,50));
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        this.add(score2,gbc);
 
         //키 감지하는 함수
             /*알고리즘 자체는 키를 누르고 있을 때 해당하는 변수를 true로 바꾸고 그 키를 땔 때 false로 바꾸는 것으로
@@ -39,21 +72,21 @@ public class GamePanel extends JPanel {
                                          int key = e.getKeyCode();// key 입력받은 값을 저장하는 변수
                                          //왼쪽 화살표 누를때 오른쪽 벽 상승
                                          if (key == KeyEvent.VK_LEFT) {
-                                             Game.getWallMove2().isUp = true;
+                                             game.getWallMove2().isUp = true;
 
 
                                          }
                                          //오른쪽 화살표 누를 떄 오른쪽 벽 하락
                                          if (key == KeyEvent.VK_RIGHT) {
-                                             Game.getWallMove2().isDown = true;
+                                             game.getWallMove2().isDown = true;
                                          }
                                          //key A가 눌릴 때 왼쪽 벽 상승
                                          if (key == KeyEvent.VK_A) {
-                                             Game.getWallMove1().isUp = true;
+                                             game.getWallMove1().isUp = true;
                                          }
                                          //key D가 눌릴 때 오른쪽 벽 하락
                                          if (key == KeyEvent.VK_D) {
-                                             Game.getWallMove1().isDown = true;
+                                             game.getWallMove1().isDown = true;
                                          }
 
                                      }
@@ -66,19 +99,19 @@ public class GamePanel extends JPanel {
                                          if(key == KeyEvent.VK_ESCAPE){
 
                                              cardLayout.show(cardPanel,"PausePanel");
-                                             Game.gamepause();
+                                             game.gamepause();
                                          }
                                          if (key == KeyEvent.VK_LEFT) {
-                                             Game.getWallMove2().isUp = false;
+                                             game.getWallMove2().isUp = false;
                                          }
                                          if (key == KeyEvent.VK_RIGHT) {
-                                             Game.getWallMove2().isDown = false;
+                                             game.getWallMove2().isDown = false;
                                          }
                                          if (key == KeyEvent.VK_A) {
-                                             Game.getWallMove1().isUp = false;
+                                             game.getWallMove1().isUp = false;
                                          }
                                          if (key == KeyEvent.VK_D) {
-                                             Game.getWallMove1().isDown = false;
+                                             game.getWallMove1().isDown = false;
                                          }
                                      }
                                  }
@@ -88,9 +121,11 @@ public class GamePanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-
+        Game game = Game.Instance;
+        score1.setText(String.valueOf(game.getScore1()));
+        score2.setText(String.valueOf(game.getScore2()));
         super.paintComponent(g);
-        for(Ball ball : Game.getBalls()){//ArrayList에 공 객체 담고 리스트안에 있는 객체들 모두 불러와서 그림 그림
+        for(Ball ball : game.getBalls()){//ArrayList에 공 객체 담고 리스트안에 있는 객체들 모두 불러와서 그림 그림
             // 초기 위치
             // 현재 위치 계산
             double x = ball.calculateX();
@@ -110,26 +145,33 @@ public class GamePanel extends JPanel {
             }
             //벽 만드는 코드
             g.setColor(Color.BLACK);
-            g.drawRect(Game.getWall1().startX,Game.getWall1().startY,Game.getWall1().width,Game.getWall1().height);
-            g.drawRect(Game.getWall2().startX,Game.getWall2().startY,Game.getWall2().width,Game.getWall2().height);
+            g.drawRect(game.getWall1().startX,game.getWall1().startY,game.getWall1().width,game.getWall1().height);
+            g.drawRect(game.getWall2().startX,game.getWall2().startY,game.getWall2().width,game.getWall2().height);
             //중앙선 그리는 코드
             g.setColor(Color.BLACK);
             g.drawLine(400,50,400,500);
 
             if (ball.drawX <= 0) {
+                game.score2Up();
+                game.getBalls().clear();
+                game.getBalls().add(new Ball());
 
             }
             if( ball.drawX + 6 >= getWidth()){
+                game.score1Up();
+                game.getBalls().clear();
+                game.getBalls().add(new Ball());
+
 
             }
             //벽판정
             //왼
-            if ((ball.drawX <= Game.getWall1().startX +Game.getWall1().width &&ball.drawX >= Game.getWall1().startX )&&(ball.drawY >= Game.getWall1().startY && ball.drawY <= Game.getWall1().startY +Game.getWall1().height)) {
+            if ((ball.drawX <= game.getWall1().startX +game.getWall1().width &&ball.drawX >= game.getWall1().startX )&&(ball.drawY >= game.getWall1().startY && ball.drawY <= game.getWall1().startY +game.getWall1().height)) {
 
                 ball.reflectX();
             }
             //우
-            if ((ball.drawX >= Game.getWall2().startX -Game.getWall2().width&&ball.drawX <= Game.getWall2().startX)&&(ball.drawY >= Game.getWall2().startY && ball.drawY <= Game.getWall2().startY +Game.getWall1().height)) {
+            if ((ball.drawX >= game.getWall2().startX -game.getWall2().width&&ball.drawX <= game.getWall2().startX)&&(ball.drawY >= game.getWall2().startY && ball.drawY <= game.getWall2().startY +game.getWall1().height)) {
                 ball.reflectX();
             }
 
