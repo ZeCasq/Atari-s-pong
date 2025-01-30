@@ -26,7 +26,7 @@ public class PausePanel  {
         gbc.anchor = GridBagConstraints.WEST;
         PausePanel.add(restart, gbc);
 
-        //종료버튼
+        //메인 홈으로 가는 버튼
         JButton home = new JButton("홈으로");
         home.addActionListener(e -> {
             cardLayout.show(cardPanel,"StartScreen");

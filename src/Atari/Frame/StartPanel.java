@@ -61,6 +61,24 @@ public class StartPanel {
         gbc.anchor = GridBagConstraints.EAST;
         startPanel.add(end,gbc);
 
+        JLabel contorl1 = new JLabel("Player1  Up : A , Down : D");
+        contorl1.setFont(new Font("Arial",Font.BOLD,20));
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.gridheight = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        startPanel.add(contorl1,gbc);
+
+        JLabel contorl2 = new JLabel("Player2  Up : <- , Down : ->");
+        contorl2.setFont(new Font("Arial",Font.BOLD,20));
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        gbc.gridheight = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        startPanel.add(contorl2,gbc);
+
         return startPanel;
     }
 }

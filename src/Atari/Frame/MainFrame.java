@@ -1,7 +1,5 @@
 package Atari.Frame;
 
-import Atari.System.Game;
-
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,16 +24,20 @@ public class MainFrame extends JFrame {
         JPanel cardPanel = new JPanel(cardLayout);
         StartPanel startPanelm = new StartPanel();
         PausePanel pausePanelm = new PausePanel();
+
         //키드패널 생성
 
 
         //카드레이아웃에 패널들 붙이기
-        GamePanel gamePanel = new GamePanel(cardLayout,cardPanel);
+        EndPanel endPanel = new EndPanel(cardLayout,cardPanel);
+        cardPanel.add(endPanel,"EndPanel");
+        GamePanel gamePanel = new GamePanel(cardLayout,cardPanel,endPanel);
         cardPanel.add(gamePanel,"GameScreen");
         JPanel startPanel  = startPanelm.createStartPanel(cardLayout,cardPanel,gamePanel);
         cardPanel.add(startPanel,"StartScreen");
         JPanel pausePanel = pausePanelm.createPausePanel(cardLayout,cardPanel,gamePanel);
         cardPanel.add(pausePanel,"PausePanel");
+
 
         cardLayout.show(cardPanel,"StartScreen");
 

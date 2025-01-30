@@ -1,6 +1,7 @@
-package Atari.Object;
+package Atari.System;
 
 
+import Atari.Object.Wall;
 
 public class WallMove implements Runnable{
     Wall wall;

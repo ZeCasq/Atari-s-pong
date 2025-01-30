@@ -2,17 +2,12 @@ package Atari.Frame;
 
 import Atari.Object.*;
 import Atari.System.*;
-import Atari.Object.Wall;
-import Atari.Object.WallMove;
 
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 
 /**
@@ -21,15 +16,23 @@ import java.util.ArrayList;
 public class GamePanel extends JPanel {
     JLabel score1;
     JLabel score2;
+    CardLayout cardLayout;
+    JPanel cardPanel;
+    EndPanel endPanel;
 
-    public GamePanel(CardLayout cardLayout, JPanel cardPanel) {
+
+    public GamePanel(CardLayout cardLayout, JPanel cardPanel,EndPanel endPanel) {
+        this.cardLayout =cardLayout;
+        this.cardPanel = cardPanel;
+        this.endPanel = endPanel;
+
         Game game = Game.Instance;
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         // 여백 설정
         gbc.insets = new Insets(0, 200, 240, 200);
 
-        //게임 제목 표기
+        //일시정지 설명 라벨 표기
 
         JLabel explain = new JLabel("esc를 누르면 일시정지 됩니다");
 
@@ -48,7 +51,7 @@ public class GamePanel extends JPanel {
         gbc.anchor = GridBagConstraints.WEST;
         this.add(score1,gbc);
 
-        //종료버튼
+        //스코어 표시
         score2 = new JLabel(String.valueOf(game.getScore2()));
         score2.setFont(new Font("Arial",Font.BOLD,50));
         gbc.gridx = 1;
@@ -95,6 +98,13 @@ public class GamePanel extends JPanel {
                                      @Override
                                      public void keyReleased(KeyEvent e) {
                                          int key = e.getKeyCode();
+                                         //엔드 페이지 테스트 용
+                                         if(key == KeyEvent.VK_R){
+                                             game.setScore1(10);
+                                         }
+                                         if(key == KeyEvent.VK_T){
+                                             game.setScore2(10);
+                                         }
                                          //esc 눌렀을 때 퍼즈
                                          if(key == KeyEvent.VK_ESCAPE){
 
@@ -182,6 +192,12 @@ public class GamePanel extends JPanel {
                 ball.reflectY();
             }
         }
+    }
+
+    public void goEnd(){
+        Game game = Game.Instance;
+        endPanel.setWin_player(game.getWinner());
+        cardLayout.show(cardPanel,"EndPanel");
     }
 
 

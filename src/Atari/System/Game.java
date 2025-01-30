@@ -1,10 +1,8 @@
 package Atari.System;
 import Atari.Frame.GamePanel;
 import Atari.Object.*;
-import Atari.Object.WallMove;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -27,6 +25,7 @@ public enum Game{
     private Thread thread1;
     private Thread thread2;
     private Timer timer;
+    private int winner;
 
 
     Game(){
@@ -40,6 +39,7 @@ public enum Game{
     public void settingGamePanel(GamePanel gamePanel){
         this.gamePanel = gamePanel;
     }
+    public GamePanel getGamePanel(){return this.gamePanel;}
     //점수
     private int score1 = 0;
     private int score2 = 0;
@@ -65,23 +65,27 @@ public enum Game{
      * 게임 진행을 맡은 클래스
      */
     public void start(){
+        winner = 0;
 
         thread1.start();
         thread2.start();
-
-        // 타이머 설정
-        //interval 마다 actionPerformed가 실행되는 구조
-        // 시간 증가
-        //                    if ((int) (time) % 5000 == 0) {     // 일정 시간마다 속도 증가
-        //                        speedX *= 1.6;
-        //                        speedY *= 1.6;
-        //                    }
-        // 화면 갱신 여기서 paintComponent 호출
-        //System.out.println(thread.getState());
         timer = new Timer(interval, new ActionListener() {//interval 마다 actionPerformed가 실행되는 구조
+
             @Override
             public void actionPerformed(ActionEvent e) {
+                //엔딩 조건
+                if(score1 == 10){
+                    gamepause();
+                    winner = 1;
+                    gamePanel.goEnd();
 
+                }
+                if(score2 == 10){
+                    gamepause();
+                    winner = 2;
+                    gamePanel.goEnd();
+
+                }
                 time += interval; // 시간 증가
 
 
@@ -112,23 +116,9 @@ public enum Game{
         wallMove2.re();
     }
 
-    private void ballAdd(){
-        balls.add(new Ball());
-    }
-
-    private void ballsSpeedUp(){
-        for(Ball ball : balls){
-            ball.speedX *= 1.3;
-            ball.speedY *= 1.3;
-        }
-    }
 
 
-
-
-
-
-
+    // 여기서부턴 싱글톤이라 외부 클래스에서 변수 호출시 필요한 것들이라 간단함
     public void score1Up(){
         score1++;
     }
@@ -162,7 +152,30 @@ public enum Game{
         return score2;
     }
 
+    public int getWinner() {
+        return winner;
+    }
+
+    public void setScore1(int score1) {
+        this.score1 = score1;
+    }
+
+    public void setScore2(int score2) {
+        this.score2 = score2;
+    }
+
+    //만약 시간에 따라 게임 변화를 준다면 필요한 것들
     public double getTime() {
         return time;
+    }
+    private void ballAdd(){
+        balls.add(new Ball());
+    }
+
+    private void ballsSpeedUp(){
+        for(Ball ball : balls){
+            ball.speedX *= 1.3;
+            ball.speedY *= 1.3;
+        }
     }
 }
