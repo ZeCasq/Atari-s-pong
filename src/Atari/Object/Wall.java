@@ -9,7 +9,9 @@ public class Wall {
     public int width;
     public int height;
 
-    //벽의 좌표 기준점은 벽의 왼쪽 상단 꼭짓점인듯
+    /**
+     *     벽의 좌표 기준점은 벽의 왼쪽 상단 꼭짓점인듯
+     */
     public Wall(int startX, int startY,int width,int height) {
         this.startX = startX;
         this.startY = startY;

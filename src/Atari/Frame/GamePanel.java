@@ -12,6 +12,7 @@ import java.awt.event.KeyListener;
 
 /**
     게임의 ui및 키입력을 나타내는 클래스
+    엔드 페이지 확인 하려면 키보드에서 R이나 T눌러 보삼 KeyRelease에도 써있긴함
  */
 public class GamePanel extends JPanel {
     JLabel score1;
@@ -194,6 +195,9 @@ public class GamePanel extends JPanel {
         }
     }
 
+    /**
+     * 엔드 페이지로 보내는 함수
+     */
     public void goEnd(){
         Game game = Game.Instance;
         endPanel.setWin_player(game.getWinner());

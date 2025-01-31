@@ -11,7 +11,10 @@ public class WallMove implements Runnable{
     public WallMove(Wall wall1) {
         this.wall = wall1;
     }
-    //쓰레드를 start했을 때 자동적으로 run이 실행 되는 듯,계속 반복하기 위해 루프를 걸었음
+
+    /**
+     *쓰레드를 start했을 때 자동적으로 run이 실행 되는 듯,계속 반복하기 위해 루프를 걸었음
+     */
     public void run() {
         while (true) {
             //go가 false일 때 계속해서 10ms 멈추는데 go는 퍼즈걸 때 false됨 즉 그냥 퍼즈 거는 용도
