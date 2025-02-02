@@ -5,6 +5,8 @@ import java.util.Random;
 public class Ball {
     private Random random = new Random();
 
+    int width = 10;
+    int height = 10;
     int direction; //방향 (좌우)
     private double angle = random.nextInt(30) + 30;; // 발사 각도 (도) 30~60도
     private double velocity = 1000; // 초기 속도 (m/s)
