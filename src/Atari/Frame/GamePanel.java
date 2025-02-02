@@ -6,6 +6,8 @@ import Atari.System.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -20,6 +22,7 @@ public class GamePanel extends JPanel {
     CardLayout cardLayout;
     JPanel cardPanel;
     EndPanel endPanel;
+    int countdown = -1; // 카운트다운하기 위한 변수
 
 
     public GamePanel(CardLayout cardLayout, JPanel cardPanel,EndPanel endPanel) {
@@ -108,7 +111,6 @@ public class GamePanel extends JPanel {
                                          }
                                          //esc 눌렀을 때 퍼즈
                                          if(key == KeyEvent.VK_ESCAPE){
-
                                              cardLayout.show(cardPanel,"PausePanel");
                                              game.gamepause();
                                          }
@@ -141,19 +143,13 @@ public class GamePanel extends JPanel {
             // 현재 위치 계산
             double x = ball.calculateX();
             double y = ball.calculateY();
-//            if ((int) (Game.getTime()) % 5000 == 0) {     // 일정 시간마다 속도 증가
-//                ball.speedX *= 1.3;
-//                ball.speedY *= 1.3;
-//            }
+
             ball.drawX += (int) (x);
             ball.drawY -= (int) (y);
 
-            // 땅에 닿기 전까지 그리기
-            if (true) {  // y좌표계는 위로 올라갈 수록 작은 거임.
-                g.setColor(Color.BLUE);
-                g.fillOval(ball.drawX, ball.drawY, 10, 10); // 물체 그리기 x 지름 y지름 모두 10인 타원 즉, 반지름이 5인 원
+            g.setColor(Color.BLUE);
+            g.fillOval(ball.drawX, ball.drawY, ball.getWidth(), ball.getHeight()); // 물체 그리기 x 지름 y지름 모두 10인 타원 즉, 반지름이 5인 원
 
-            }
             //벽 만드는 코드
             g.setColor(Color.BLACK);
             g.drawRect(game.getWall1().startX,game.getWall1().startY,game.getWall1().width,game.getWall1().height);
@@ -172,20 +168,42 @@ public class GamePanel extends JPanel {
                 game.score1Up();
                 game.getBalls().clear();
                 game.getBalls().add(new Ball());
+            }
 
+            if (countdown > 0) {
+                g.setFont(new Font("Arial", Font.BOLD,100));
+                g.setColor(Color.BLUE);
+                String countdownText = String.valueOf(countdown);
+                FontMetrics fm = g.getFontMetrics();
+                int textWidth = fm.stringWidth(countdownText);
+                int textHeight = fm.getAscent();
 
+                g.drawString(countdownText, getWidth() / 2 - textWidth / 2, getHeight() / 2 + textHeight / 2);
             }
             //벽판정
             //왼
-            if ((ball.drawX <= game.getWall1().startX +game.getWall1().width &&ball.drawX >= game.getWall1().startX )&&(ball.drawY >= game.getWall1().startY && ball.drawY <= game.getWall1().startY +game.getWall1().height)) {
+            int wall1Right = game.getWall1().startX + game.getWall1().width;
+            int wall1Left = game.getWall1().startX;
+            int wall1Top = game.getWall1().startY + game.getWall1().height;
+            int wall1Bottom = game.getWall1().startY;
 
-                ball.reflectX();
+            if (ball.drawX <= wall1Right && ball.drawX >= wall1Left) {
+                if (ball.drawY >= wall1Bottom && ball.drawY <= wall1Top) {
+                    ball.drawX = wall1Right;
+                    ball.reflectX();
+                }
             }
+
             //우
-            if ((ball.drawX >= game.getWall2().startX -game.getWall2().width&&ball.drawX <= game.getWall2().startX)&&(ball.drawY >= game.getWall2().startY && ball.drawY <= game.getWall2().startY +game.getWall1().height)) {
+            int wall2Right = game.getWall2().startX + game.getWall2().width;
+            int wall2Left = game.getWall2().startX;
+            int wall2Top = game.getWall2().startY + game.getWall2().height;
+            int wall2Bottom = game.getWall2().startY;
+
+            if ((ball.drawX + ball.getWidth() >= wall2Left  && ball.drawX + ball.getWidth() <= wall2Right)) { // drawX와 drawY는 공의 왼쪽 상단 모서리 좌표가 기준임.
+                if (ball.drawY >= wall2Bottom && ball.drawY <= wall2Top)    // 때문에 벽의 아랫부분으로 공을 칠 때는 판정이 후하고, 위쪽으로 칠 때는 짤 수도 있음. 필요시 조정하면 됨.
                 ball.reflectX();
             }
-
 
 
             if (ball.drawY <= 0 || ball.drawY + 6 >= getHeight()) { //frame height 크기가 600이기 때문.
@@ -193,6 +211,46 @@ public class GamePanel extends JPanel {
                 ball.reflectY();
             }
         }
+    }
+
+    public void startCountDown_start() {
+        countdown = 3;
+        Timer countdownTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                countdown--;
+                repaint();
+
+                if (countdown <=0) {
+                    ((Timer) e.getSource()).stop();
+                    Game game = Game.Instance;
+                    game.start();
+                }
+            }
+        });
+        countdownTimer.setRepeats(true);
+        countdownTimer.start();
+        repaint();
+    }
+
+    public void startCountDown_restart() {
+        countdown = 3;
+        Timer countdownTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                countdown--;
+                repaint();
+
+                if (countdown <=0) {
+                    ((Timer) e.getSource()).stop();
+                    Game game = Game.Instance;
+                    game.gamerestart();
+                }
+            }
+        });
+        countdownTimer.setRepeats(true);
+        countdownTimer.start();
+        repaint();
     }
 
     /**

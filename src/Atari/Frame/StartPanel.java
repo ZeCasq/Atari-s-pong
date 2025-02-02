@@ -40,7 +40,7 @@ public class StartPanel {
             game.gameset();
 
             cardLayout.show(cardPanel,"GameScreen");
-            game.start();
+            gamePanel.startCountDown_start();
             gamePanel.requestFocusInWindow(); //키보드 입력을 받을 수 있도록 포커스를 요청하는 함수
             gamePanel.revalidate();
             gamePanel.repaint();

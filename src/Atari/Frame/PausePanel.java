@@ -18,7 +18,7 @@ public class PausePanel  {
             Game game = Game.Instance;
             cardLayout.show(cardPanel,"GameScreen");
             gamePanel.requestFocusInWindow();
-            game.gamerestart();
+            gamePanel.startCountDown_restart();
         });
 
         gbc.gridx = 0;

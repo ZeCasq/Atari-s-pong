@@ -47,7 +47,6 @@ public class WallMove implements Runnable{
      */
     public void re(){
         go = true;
-
     }
 
 }

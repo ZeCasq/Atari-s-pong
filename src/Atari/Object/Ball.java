@@ -27,6 +27,10 @@ public class Ball {
         }
     }
 
+    public int getWidth() { return width; }
+
+    public int getHeight() { return height; }
+
     private final int interval = 5; // 타이머 간격 (밀리초)
 
     public double calculateX() {

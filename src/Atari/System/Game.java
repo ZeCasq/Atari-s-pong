@@ -88,7 +88,12 @@ public enum Game{
                 }
                 time += interval; // 시간 증가
 
-
+                if (time % 1000 == 0) {         // 너무 루즈해지지 않을 템포로 속도 올렸는데, 너무 일찍 속도가 빨라진다 하면 늘려도 상관 없음
+                    for (Ball ball : balls) {
+                        ball.speedX *= 1.2;
+                        ball.speedY *= 1.2;
+                    }
+                }
                 gamePanel.repaint(); // 화면 갱신 여기서 paintComponent 호출
                 //System.out.println(thread.getState());
             }
