@@ -22,7 +22,7 @@ public class GamePanel extends JPanel {
     CardLayout cardLayout;
     JPanel cardPanel;
     EndPanel endPanel;
-    int countdown = -1; // 카운트다운하기 위한 변수
+    boolean keyEnabled = true;
 
 
     public GamePanel(CardLayout cardLayout, JPanel cardPanel,EndPanel endPanel) {
@@ -68,6 +68,8 @@ public class GamePanel extends JPanel {
             쓰   레드에서 만약 해당하는 변수의 값이 true면 그에 맞게 벽이 움직이도록 설정함
              */
         this.addKeyListener(new KeyListener() {
+
+
                                      @Override
                                      //key가 눌려 문자가 완성 될 때 발생하는 이벤트 쓸 일 없을거 같은데 아마 동시 처리에 실마리가 될지도
                                      public void keyTyped(KeyEvent e) {
@@ -170,10 +172,10 @@ public class GamePanel extends JPanel {
                 game.getBalls().add(new Ball());
             }
 
-            if (countdown > 0) {
+            if (game.getCountdown()> 0) {
                 g.setFont(new Font("Arial", Font.BOLD,100));
-                g.setColor(Color.BLUE);
-                String countdownText = String.valueOf(countdown);
+                g.setColor(Color.BLACK);
+                String countdownText = String.valueOf(game.getCountdown());
                 FontMetrics fm = g.getFontMetrics();
                 int textWidth = fm.stringWidth(countdownText);
                 int textHeight = fm.getAscent();
@@ -213,45 +215,7 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public void startCountDown_start() {
-        countdown = 3;
-        Timer countdownTimer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                countdown--;
-                repaint();
 
-                if (countdown <=0) {
-                    ((Timer) e.getSource()).stop();
-                    Game game = Game.Instance;
-                    game.start();
-                }
-            }
-        });
-        countdownTimer.setRepeats(true);
-        countdownTimer.start();
-        repaint();
-    }
-
-    public void startCountDown_restart() {
-        countdown = 3;
-        Timer countdownTimer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                countdown--;
-                repaint();
-
-                if (countdown <=0) {
-                    ((Timer) e.getSource()).stop();
-                    Game game = Game.Instance;
-                    game.gamerestart();
-                }
-            }
-        });
-        countdownTimer.setRepeats(true);
-        countdownTimer.start();
-        repaint();
-    }
 
     /**
      * 엔드 페이지로 보내는 함수

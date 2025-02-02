@@ -13,11 +13,12 @@ import java.util.ArrayList;
 public enum Game{
     Instance;
     private GamePanel gamePanel;      // 연결할 게임 패널 repaint를 요청하기 위해서
+    private int countdown = -1; // 카운트다운하기 위한 변수
 
     private Wall wall1; //왼쪽 벽
     private Wall wall2; //오른쪽 벽
-    private ArrayList<Ball> balls =new ArrayList<>();
-    private int interval = 5;
+    private final ArrayList<Ball> balls =new ArrayList<>();
+    private final int interval = 5;
     private double time = 0; // 시간 (초)
     //추후 쓰레드를 위한 변수
     private WallMove wallMove1;
@@ -120,10 +121,56 @@ public enum Game{
         wallMove1.re();
         wallMove2.re();
     }
+    public void startCountDown_start() {
+        countdown = 3;
+        Timer countdownTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                countdown--;
+                gamePanel.repaint();
+
+                if (countdown <=0) {
+                    ((Timer) e.getSource()).stop();
+                    start();
+                }
+            }
+        });
+        countdownTimer.setRepeats(true);
+        countdownTimer.start();
+
+    }
+
+    public void startCountDown_restart() {
+        countdown = 3;
+        gamePanel.setFocusable(false);
+        Timer countdownTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                countdown--;
+                gamePanel.repaint();
+
+                if (countdown <=0) {
+                    ((Timer) e.getSource()).stop();
+                    gamePanel.setFocusable(true);
+                    gamePanel.requestFocusInWindow();
+                    gamerestart();
+
+                }
+            }
+        });
+        countdownTimer.setRepeats(true);
+        countdownTimer.start();
+
+    }
 
 
 
     // 여기서부턴 싱글톤이라 외부 클래스에서 변수 호출시 필요한 것들이라 간단함
+
+    public int getCountdown() {
+        return countdown;
+    }
+
     public void score1Up(){
         score1++;
     }
